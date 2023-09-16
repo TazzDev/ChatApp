@@ -1,46 +1,64 @@
-# Getting Started with Create React App
+# Chat App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple chat application client.
 
-## Available Scripts
+## Dependencies
 
-In the project directory, you can run:
+This app has been done entirely using CRA-Typescript.
+ * React
+ * TypeScript
+ * Styled Components
+ * React Framer Motion
 
-### `npm start`
+## Setup
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The entire project has been done with Node v19.9.0 (LTS) and npm v9.6.3. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+If you're on OSX (Mac) please run
+```bash
+nvm use
+```
 
-### `npm test`
+or for windows, make sure you're on the right node and npm versions. You can run 
+```bash
+node -v
+npm -v
+```
+to see which versions are installed
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+then run 
 
-### `npm run build`
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Also, please modify the .env file with the API URL and API token to connect to the Bunq Backend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running the app
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Once the setup is done, simply run 
+```bash
+npm run start 
+```
+to start the web app. 
 
-### `npm run eject`
+## Testing
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+-Placeholder
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Retrospective
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* The implementation of polling has been done to simulate a real-time experience. Since this is a realtively low-load scenario this approach was fine. But for cases where it falls short because of factors like really low-latency requirement or server load, implementing web sockets or long polling or SSE would work better depending on the use-case.
+    * Another side effect of polling that could be improved is an exponential backoff, where if an API call fails then the subsequent API call would only be made after delay * 2. This would help reduce hitting the server unnecessarily if there ever is an outage. 
+* An authentication service would improve user experience and be able to dynamically sign in - currently this is hardcoded since the requirement just was to login.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Testing credentials
 
-## Learn More
+ Username: admin
+ Password: admin
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Author
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Thomson M. - For Bunq Assessment
+
+
