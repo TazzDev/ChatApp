@@ -5,6 +5,8 @@ import * as Styled from "./MessageList.styled";
 import Input from "../Input/Input";
 import { useSendMessage } from "../../api/api";
 import Button from "../Button/Button";
+import { motion } from "framer-motion";
+import Separator from "../Separator/Separator";
 
 export interface MessageProps {
   userId: string;
@@ -24,15 +26,21 @@ const MessageList: React.FC<MessageListProps> = ({
   const [messageText, setMessageText] = useState("");
   const navigate = useNavigate();
 
-  const { postFunction, loading } = useSendMessage(10, conversationId);
+  const { postFunction } = useSendMessage(10, conversationId);
   const onSendText = (value: string) => {
     postFunction({ text: value });
     setMessageText("");
   };
 
   return (
-    <Styled.MessageListContainer>
-      <Button onClick={()=>navigate('/dashboard')}>&#60; Chats </Button>
+    <Styled.MessageListContainer
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
+      <Button onClick={() => navigate("/dashboard")}>&#60; Chats </Button>
+      <Separator />
       <Styled.MessageListWrapper>
         {messages.map(({ userId, sentAt, text }) => (
           <Message userId={userId} sentAt={sentAt} text={text} />

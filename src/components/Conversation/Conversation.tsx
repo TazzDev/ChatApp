@@ -18,7 +18,9 @@ const Conversation: React.FC<ConversationProps> = ({
   lastMessage,
 }) => {
   const lastSeenAt = getTimeDifferenceText(sender.last_seen_at);
-  const senderFirstChar = sender.name.split("")[0].toUpperCase();
+  const isNotGroup = !name;
+  const conversationName = name ? name : sender.name
+  const senderFirstChar = conversationName.split("")[0].toUpperCase();
   const navigate = useNavigate();
   return (
     <Styled.ConversationContainer
@@ -32,11 +34,11 @@ const Conversation: React.FC<ConversationProps> = ({
       <Styled.Sender>
         <Styled.SenderAvatar>{senderFirstChar}</Styled.SenderAvatar>
         <Styled.SenderDetails>
-          <Styled.SenderName>{sender.name}</Styled.SenderName>
+          <Styled.SenderName>{conversationName}</Styled.SenderName>
           <Styled.LastMessage> {lastMessage?.text}</Styled.LastMessage>
         </Styled.SenderDetails>
       </Styled.Sender>
-      <Styled.LastSeen> Last seen {lastSeenAt} ago</Styled.LastSeen>
+      {isNotGroup && <Styled.LastSeen> Last seen {lastSeenAt} ago</Styled.LastSeen>}
     </Styled.ConversationContainer>
   );
 };

@@ -20,7 +20,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const navigate = useNavigate();
   const getConversations = (conversations: ConversationProps[]) => {
-    console.log(conversations)
+    console.log(conversations);
     if (!conversations.length) {
       return "No conversations";
     }
@@ -28,6 +28,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       <Conversation
         key={conversation.id}
         id={conversation.id}
+        name={conversation.name}
         lastMessage={conversation.last_message}
         sender={
           conversation.members.filter((member: any) => member.id !== 10)[0]
@@ -36,15 +37,20 @@ const ConversationList: React.FC<ConversationListProps> = ({
     ));
   };
   return (
-    <Styled.ConversationListWrapper as={motion.div} initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.5}}>
-    <Styled.ConversationListContainer >
-      <Styled.ConversationControls>
-        <Button fullWidth onClick={() => navigate("/create-conversation")}>
-          Create Conversation
-        </Button>
-      </Styled.ConversationControls>
-      {getConversations(conversations)}
-    </Styled.ConversationListContainer>
+    <Styled.ConversationListWrapper
+      as={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Styled.ConversationListContainer>
+        <Styled.ConversationControls>
+          <Button fullWidth onClick={() => navigate("/create-conversation")}>
+            Create Conversation
+          </Button>
+        </Styled.ConversationControls>
+        {getConversations(conversations)}
+      </Styled.ConversationListContainer>
     </Styled.ConversationListWrapper>
   );
 };
