@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const LoginContainer = styled.div`
+export const Background = styled.div`
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.9);

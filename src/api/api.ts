@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useInterval } from "../utils";
 
 const API_URL = (process.env as any).REACT_APP_API_URL;
@@ -10,15 +10,45 @@ const headersWithBearerAuth = {
   Accept: "application/json",
 };
 
-const useFetchData: (
-  endpoint: string,
-  method?: "GET" | "POST",
-  requestBody?: any
-) => { data: any; loading: boolean; error: any } = (
-  endpoint,
-  method = "GET",
-  requestBody = undefined
-) => {
+const usePostData: (endpoint: string) => {
+  postFunction: any;
+  data: any;
+  loading: boolean;
+  error: any;
+} = (endpoint) => {
+  const [data, setData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<any>();
+
+  const postFunction = useCallback(
+    (requestBody: any) => {
+      const fetchOptions: RequestInit = {
+        headers: headersWithBearerAuth,
+        method: "POST",
+      };
+      fetch(`${API_URL}${endpoint}`, {
+        ...fetchOptions,
+        body: JSON.stringify(requestBody),
+      })
+        .then((response: Response) => response.json())
+        .then((json: any) => {
+          setData(json);
+          setLoading(false);
+        })
+        .catch((err) => setError(err))
+        .finally(() => setLoading(false));
+    },
+    [endpoint]
+  );
+
+  return { postFunction, data, loading, error };
+};
+
+const useFetchData: (endpoint: string) => {
+  data: any;
+  loading: boolean;
+  error: any;
+} = (endpoint, requestBody = undefined) => {
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>();
@@ -26,11 +56,8 @@ const useFetchData: (
   useEffect(() => {
     const fetchOptions: RequestInit = {
       headers: headersWithBearerAuth,
-      method,
+      method: "GET",
     };
-    if (method === "POST") {
-      fetchOptions.body = JSON.stringify(requestBody);
-    }
     fetch(`${API_URL}${endpoint}`, fetchOptions)
       .then((response: Response) => response.json())
       .then((json: any) => {
@@ -39,7 +66,7 @@ const useFetchData: (
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
-  }, [endpoint, method, requestBody]);
+  }, [endpoint]);
 
   return { data, loading, error };
 };
@@ -71,18 +98,13 @@ export const useGetUser: (userId: number) => {
   return useFetchData(`/user/${userId}`);
 };
 
-export const useCreateConversation: (
-  currentUserId: number,
-  userIds: number | number[]
-) => { data: any; loading: boolean; error: any } = (currentUserId, userIds) => {
-  const createConversationBody = {
-    user_ids: typeof userIds === "number" ? [userIds] : userIds,
-  };
-  return useFetchData(
-    `/user/${currentUserId}/conversation`,
-    "POST",
-    createConversationBody
-  );
+export const useCreateConversation: (currentUserId: number) => {
+  postFunction: any;
+  data: any;
+  loading: boolean;
+  error: any;
+} = (currentUserId) => {
+  return usePostData(`/user/${currentUserId}/conversation`);
 };
 
 export const useGetConversations: (
@@ -101,20 +123,13 @@ export const useGetConversations: (
 
 export const useSendMessage: (
   currentUserId: number,
-  conversationId: string,
-  message: string
-) => { data: any; loading: boolean; error: any } = (
+  conversationId: string
+) => { postFunction: any; data: any; loading: boolean; error: any } = (
   currentUserId,
-  conversationId,
-  message
+  conversationId
 ) => {
-  const sendMessageBody = {
-    text: message,
-  };
-  return useFetchData(
-    `/user/${currentUserId}/conversation/${conversationId}/message`,
-    "POST",
-    sendMessageBody
+  return usePostData(
+    `/user/${currentUserId}/conversation/${conversationId}/message`
   );
 };
 
@@ -131,8 +146,8 @@ export const useGetMessages: (
 };
 
 export const useMessagePolling = (
-  currentUserId: number,
-  conversationId: number
+  currentUserId: string,
+  conversationId: string
 ) => {
   const [data, setData] = useState();
   const [error, setError] = useState();
@@ -156,7 +171,7 @@ export const useMessagePolling = (
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
 
-  useInterval(callbackFn, 3000);
+  useInterval(callbackFn, 1000);
 
   return { data, loading, error };
 };

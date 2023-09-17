@@ -9,7 +9,7 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `
 
 export const Input = styled.input<{background: string}>`
-cursor: pointer;
+cursor: ${(props)=>props.disabled ? "not-allowed": "pointer"};
 color: white;
 background: ${({background})=>background};
 border: 0.4px solid transparent;
@@ -26,4 +26,5 @@ export const Label = styled.label`
 font-size: 0.8rem;
 margin-bottom: 4px;
 letter-spacing: 0.1rem;
+white-space: nowrap;
 `
