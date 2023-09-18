@@ -30,7 +30,6 @@ const Login: React.FC = () => {
       >
         <Styled.LoginHeader>
           ChatApp
-          <Styled.Subscript> for Bunq</Styled.Subscript>
         </Styled.LoginHeader>
         <Separator animate />
         <Input

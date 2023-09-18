@@ -32,7 +32,7 @@ then run
 npm install
 ```
 
-Also, please modify the .env file with the API URL and API token to connect to the Bunq Backend
+Also, please modify the .env file with the API URL and API token to connect to the Backend
 
 ## Running the app
 
@@ -59,6 +59,6 @@ to start the web app.
 
 ### Author
 
-Thomson M. - For Bunq Assessment
+Thomson M.
 
 
